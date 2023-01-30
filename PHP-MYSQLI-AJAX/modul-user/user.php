@@ -3,16 +3,20 @@
 include '../config/koneksi.php';
 if (!$_SESSION['id_user']) {
     echo '<script>
-    alert("anda mesti login dulu");
+    alert("YOU MUST LOGIN");
     window.location.href = "index.php";
     </script>
     ';
 }
+
+//HAPUS
 if (isset($_POST['id_user'])) {
     $id = $_POST['id_user'];
     $q =  "DELETE FROM tbl_user WHERE id_user = '$id'";
     $d = mysqli_query($connection, $q);
 }
+
+//UPDATE
 $q =  "SELECT * FROM tbl_user";
 $d = mysqli_query($connection, $q);
 if (isset($_POST['update'])) {
@@ -69,6 +73,7 @@ if (isset($_POST['update'])) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
+                                    <form action="" method="post";>
                                         <div class="form-group">
                                             <label>Nama Lengkap</label>
                                             <input type="text" class="form-control" id="nama_lengkap" placeholder="Masukkan Nama Lengkap">
@@ -81,10 +86,15 @@ if (isset($_POST['update'])) {
                                             <label>Password</label>
                                             <input type="password" class="form-control" id="password" placeholder="Masukkan Password">
                                         </div>
+                                        <div class="form-group">
+                                            <label>Image</label>
+                                            <input type="file" class="form-control" id="image" placeholder="Masukkan Foto">
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-register btn-block btn-success">REGISTER</button>
                                     </div>
+</form>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +105,8 @@ if (isset($_POST['update'])) {
                                     <th>NAMA LENGKAP</th>
                                     <th>USERNAME</th>
                                     <th>PASSWORD</th>
-                                    <th></th>
+                                    <th>IMAGE</th>
+                                    
                                     <th></th>
                                 </tr>
                             </thead>
@@ -105,6 +116,7 @@ if (isset($_POST['update'])) {
                                     echo '<tr><td>' . $r->nama_lengkap . '</td>';
                                     echo '<td>' . $r->username . '</td>';
                                     echo '<td>' . $r->password . '</td>';
+                                    echo '<td>' . $r->image . '</td>';
                                     echo '<td><a href="#" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal' . $r->id_user . '">Edit</a></td>';
                                     echo '<td><form action="" method="post"><input name="id_user" type="hidden" value=' . $r->id_user . '><button type="submit" class="btn btn-danger">hapus</form></td>';
                                     echo '<td></td></tr>';
@@ -128,19 +140,24 @@ if (isset($_POST['update'])) {
                                     <div class="form-group">
                                                 <label>Nama Lengkap</label>
                                                 <input name="id_update" value=' . $r_edit->id_user . ' type="hidden">
-                                                <input name="nama_lengkap" value=' . $r_edit->nama_lengkap . ' type="text" class="form-control" placeholder="Masukkan Nama Lengkap">
+                                                <input name="nama_lengkap" value=' . $r_edit->nama_lengkap . ' type="text" class="form-control" placeholder="Masukkan Nama Lengkap" required>
                                             </div>
                                             <div class="form-group">
                                                 <label>Username</label>
-                                                <input name="username" value=' . $r_edit->username . '  type="text" class="form-control"  placeholder="Masukkan Username">
+                                                <input name="username" value=' . $r_edit->username . '  type="text" class="form-control"  placeholder="Masukkan Username" required>
                                             </div>
                                             <div class="form-group">
                                                 <label>Password</label>
-                                                <input name="password" value=""  type="password" class="form-control"  placeholder="Masukkan Password">
+                                                <input name="password" value=""  type="password" class="form-control"  placeholder="Masukkan Password" required>
                                             </div>
+                                            <div class="form-group">
+                                            <label>Image</label>
+                                            <input name="image" value=' . $r_edit->image . '  type="file" class="form-control"  placeholder="Masukkan foto" required>
                                         </div>
+                                        </div>
+                                        
                                         <div class="modal-footer">
-                                            <button type="submit" name="update" class="btn btn-update btn-block btn-primary">UPDATE</button>
+                                            <button type="submit" name="register" class="btn btn-update btn-block btn-primary">UPDATE</button>
                                         </div>
                                     </div>
                                     </form>

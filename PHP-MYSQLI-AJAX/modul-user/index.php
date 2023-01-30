@@ -30,7 +30,12 @@
                   <label>Password</label>
                   <input type="password" class="form-control" id="password" placeholder="Masukkan Password">
                 </div>
-                
+
+                <div class="form-group">
+                  <label>Photo</label>
+                  <input type="file" name="image" class="form-control" id="image" placeholder="Masukkan Foto">
+                </div>
+               
                 <button class="btn btn-login1 btn-block btn-success">LOGIN</button>
               
             </div>
@@ -55,6 +60,7 @@
         
           var username = $("#username").val();
           var password = $("#password").val();
+          var image = $("#image").val();
 
           if(username.length == "") {
 
@@ -72,6 +78,15 @@
               text: 'Password Wajib Diisi !'
             });
 
+          } 
+          else if(image.length == "") {
+
+          Swal.fire({
+            type: 'warning',
+            title: 'Oops...',
+            text: 'Foto Wajib Diisi !'
+          });
+
           } else {
 
             $.ajax({
@@ -80,7 +95,8 @@
               type: "POST",
               data: {
                   "username": username,
-                  "password": password
+                  "password": password,
+                  "image": image
               },
 
               success:function(response){

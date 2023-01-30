@@ -91,7 +91,7 @@ if (isset($_POST['update'])) {
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" name="addStudent"class="btn btn-block btn-success">TAMBAH SISWA</button>
+                                        <button type="submit" name="addStudent"class="btn btn-register btn-block btn-success">TAMBAH SISWA</button>
                                     </div>
                                 </form>
                                 </div>
@@ -149,7 +149,7 @@ if (isset($_POST['update'])) {
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" name="update" class="btn btn-update btn-block btn-primary">UPDATE</button>
+                                            <button type="submit" name="update" class="btn btn-register btn-block btn-primary">UPDATE</button>
                                         </div>
                                     </div>
                                     </form>
@@ -172,6 +172,7 @@ if (isset($_POST['update'])) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
 </body>
+
 <script>
     $(document).ready(function() {
 
