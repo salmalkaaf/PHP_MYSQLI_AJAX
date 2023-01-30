@@ -1,36 +1,43 @@
 <?php
 @session_start();
 include '../config/koneksi.php';
-if (!$_SESSION['id_user']) {
-    echo '<script>
-    alert("anda mesti login dulu");
-    window.location.href = "index.php";
-    </script>
-    ';
+// if (!$_SESSION['id_student']) {
+//     echo '<script>
+//     alert("anda mesti login dulu");
+//     window.location.href = "../modul-user/index.php";
+//     </script>
+//     ';
+// }
+
+//jika tombol simpan di klik
+if (isset($_POST['addStudent'])) {
+    $id = $_POST['addStudent'];
+    $nisn = $_POST['nisn'];
+    $full_name = $_POST['full_name'];
+    $address = $_POST['address'];
+    $q = "INSERT INTO tbl_student(full_name, nisn, address) VALUES (' $full_name  ', '  $nisn  ', '  $address  ')";
+    $connection->query($q);
 }
-if (isset($_POST['id_user'])) {
-    $id = $_POST['id_user'];
-    $q =  "DELETE FROM tbl_user WHERE id_user = '$id'";
+
+//hapus data siswa
+if (isset($_POST['id_student'])) {
+    $id = $_POST['id_student'];
+    $q =  "DELETE FROM tbl_student WHERE id_student = '$id'";
     $d = mysqli_query($connection, $q);
 }
-$q =  "SELECT * FROM tbl_user";
+
+//update data siswa 
+$q =  "SELECT * FROM tbl_student";
 $d = mysqli_query($connection, $q);
 if (isset($_POST['update'])) {
     $id = $_POST['id_update'];
-    $nama_lengkap = $_POST['nama_lengkap'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    if ($password != '') {
-        $q =  "UPDATE tbl_user SET nama_lengkap = '$nama_lengkap', username = '$username', password = md5('$password')   WHERE id_user = '$id' ";
-        $connection->query($q);
-        header("Refresh:0");
-    } else {
-        $q =  "UPDATE tbl_user SET nama_lengkap = '$nama_lengkap', username = '$username' WHERE id_user = '$id' ";
-        $connection->query($q);
-        header("Refresh:0");
-    }
+    $nisn = $_POST['nisn'];
+    $full_name = $_POST['full_name'];
+    $address = $_POST['address'];
+    $q =  "UPDATE tbl_student SET nisn = '$nisn', full_name = '$full_name', address = '$address' WHERE id_student = '$id' ";
+    $connection->query($q);
+    header("Refresh:0");
 }
-
 ?>
 
 <!doctype html>
@@ -56,9 +63,9 @@ if (isset($_POST['update'])) {
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-body">
-                    <label><b>USER</b></label>
+                    <label><b>SISWA</b></label>
                 <hr>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalRegister" style="margin-bottom:10px;">+ tambah user</button>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalRegister" style="margin-bottom:10px;">+ tambah siswa</button>
                         <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="modalRegisterLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -69,22 +76,24 @@ if (isset($_POST['update'])) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
+                                        <form action="" method="post";>
+                                        <div class="form-group">
+                                            <label>NISN</label>
+                                            <input type="text" name="nisn"class="form-control" id="nisn" placeholder="Masukkan NISN">
+                                        </div>
                                         <div class="form-group">
                                             <label>Nama Lengkap</label>
-                                            <input type="text" class="form-control" id="nama_lengkap" placeholder="Masukkan Nama Lengkap">
+                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="Masukkan Nama Lengkap">
                                         </div>
                                         <div class="form-group">
-                                            <label>Username</label>
-                                            <input type="text" class="form-control" id="username" placeholder="Masukkan Username">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Password</label>
-                                            <input type="password" class="form-control" id="password" placeholder="Masukkan Password">
+                                            <label>Alamat</label>
+                                            <input type="text" name="address"class="form-control" id="address" placeholder="Masukkan Alamat">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button class="btn btn-register btn-block btn-success">REGISTER</button>
+                                        <button type="submit" name="addStudent"class="btn btn-block btn-success">TAMBAH SISWA</button>
                                     </div>
+                                </form>
                                 </div>
                             </div>
                         </div>
@@ -92,9 +101,9 @@ if (isset($_POST['update'])) {
                         <table class="table table-responsive">
                             <thead>
                                 <tr>
+                                    <th>NISN</th>
                                     <th>NAMA LENGKAP</th>
-                                    <th>USERNAME</th>
-                                    <th>PASSWORD</th>
+                                    <th>ALAMAT</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -102,41 +111,41 @@ if (isset($_POST['update'])) {
                             <tbody>
                                 <?php
                                 while ($r = mysqli_fetch_object($d)) {
-                                    echo '<tr><td>' . $r->nama_lengkap . '</td>';
-                                    echo '<td>' . $r->username . '</td>';
-                                    echo '<td>' . $r->password . '</td>';
-                                    echo '<td><a href="#" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal' . $r->id_user . '">Edit</a></td>';
-                                    echo '<td><form action="" method="post"><input name="id_user" type="hidden" value=' . $r->id_user . '><button type="submit" class="btn btn-danger">hapus</form></td>';
+                                    echo '<tr><td>' . $r->nisn . '</td>';
+                                    echo '<td>' . $r->full_name . '</td>';
+                                    echo '<td>' . $r->address . '</td>';
+                                    echo '<td><a href="#" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal' . $r->id_student . '">Edit</a></td>';
+                                    echo '<td><form action="" method="post"><input name="id_student" type="hidden" value=' . $r->id_student . '><button type="submit" class="btn btn-danger">hapus</form></td>';
                                     echo '<td></td></tr>';
-                                    echo '<div class="modal fade" id="myModal' . $r->id_user . '" role="dialog" aria-labelledby="myModal' . $r->id_user . 'Label" aria-hidden="true">
+                                    echo '<div class="modal fade" id="myModal' . $r->id_student . '" role="dialog" aria-labelledby="myModal' . $r->id_student . 'Label" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="myModal' . $r->id_user . 'Label">EDIT DATA</h5>
+                                            <h5 class="modal-title" id="myModal' . $r->id_student . 'Label">EDIT DATA</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
                                         ';
-                                    $id = $r->id_user;
-                                    $q_edit =  "SELECT * FROM tbl_user WHERE id_user='$id'";
+                                    $id = $r->id_student;
+                                    $q_edit =  "SELECT * FROM tbl_student WHERE id_student='$id'";
                                     $d_edit = mysqli_query($connection, $q_edit);
                                     while ($r_edit = mysqli_fetch_object($d_edit)) {
                                         echo    '
                                     <form action="" method="post">
                                     <div class="form-group">
-                                                <label>Nama Lengkap</label>
-                                                <input name="id_update" value=' . $r_edit->id_user . ' type="hidden">
-                                                <input name="nama_lengkap" value=' . $r_edit->nama_lengkap . ' type="text" class="form-control" placeholder="Masukkan Nama Lengkap">
+                                                <label>NISN</label>
+                                                <input name="id_update" value=' . $r_edit->id_student . ' type="hidden">
+                                                <input name="nisn" value=' . $r_edit->nisn . ' type="text" class="form-control" placeholder="Masukkan NISN">
                                             </div>
                                             <div class="form-group">
-                                                <label>Username</label>
-                                                <input name="username" value=' . $r_edit->username . '  type="text" class="form-control"  placeholder="Masukkan Username">
+                                                <label>NAMA LENGKAP</label>
+                                                <input name="full_name" value=' . $r_edit->full_name . '  type="text" class="form-control"  placeholder="Masukkan Nama Lengkap">
                                             </div>
                                             <div class="form-group">
-                                                <label>Password</label>
-                                                <input name="password" value=""  type="password" class="form-control"  placeholder="Masukkan Password">
+                                                <label>ALAMAT</label>
+                                                <input name="address" value=' . $r_edit->address . ' type="text" class="form-control"  placeholder="Masukkan Alamat">
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -168,11 +177,19 @@ if (isset($_POST['update'])) {
 
         $(".btn-register").click(function() {
 
-            var nama_lengkap = $("#nama_lengkap").val();
-            var username = $("#username").val();
-            var password = $("#password").val();
+            var nisn = $("#nisn").val();
+            var full_name = $("#full_name").val();
+            var address = $("#address").val();
 
-            if (nama_lengkap.length == "") {
+            if (nisn.length == "") {
+
+                Swal.fire({
+                    type: 'warning',
+                    title: 'Oops...',
+                    text: 'NISN Wajib Diisi !'
+                });
+
+            } else if (full_name.length == "") {
 
                 Swal.fire({
                     type: 'warning',
@@ -180,20 +197,12 @@ if (isset($_POST['update'])) {
                     text: 'Nama Lengkap Wajib Diisi !'
                 });
 
-            } else if (username.length == "") {
+            } else if (address.length == "") {
 
                 Swal.fire({
                     type: 'warning',
                     title: 'Oops...',
-                    text: 'Username Wajib Diisi !'
-                });
-
-            } else if (password.length == "") {
-
-                Swal.fire({
-                    type: 'warning',
-                    title: 'Oops...',
-                    text: 'Password Wajib Diisi !'
+                    text: 'Alamat Wajib Diisi !'
                 });
 
             } else {
@@ -201,12 +210,12 @@ if (isset($_POST['update'])) {
                 //ajax
                 $.ajax({
 
-                    url: "simpan-register.php",
+                    url: "save-student.php",
                     type: "POST",
                     data: {
-                        "nama_lengkap": nama_lengkap,
-                        "username": username,
-                        "password": password
+                        "nisn": nisn,
+                        "full_name": full_name,
+                        "address": address
                     },
 
                     success: function(response) {
@@ -222,9 +231,9 @@ if (isset($_POST['update'])) {
                                 window.location.href = 'dashboard.php';
                             });
 
-                            $("#nama_lengkap").val('');
-                            $("#username").val('');
-                            $("#password").val('');
+                            $("#nisn").val('');
+                            $("#full_name").val('');
+                            $("#address").val('');
 
                         } else {
 
