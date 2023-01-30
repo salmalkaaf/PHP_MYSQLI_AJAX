@@ -31,11 +31,8 @@
                    <div class="col-md-12">
                       <div class="card">
                       <div class="card-body">
+                     
               <a href="add-student.php" class="btn btn-md btn-success" style="margin-bottom: 10px">TAMBAH DATA</a>
-
-
-
-
               <table class="table table-bordered" id="myTable">
                 <thead>
                   <tr>

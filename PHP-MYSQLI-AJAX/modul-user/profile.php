@@ -32,7 +32,7 @@
                 <label><b>Profile</b></label>
                 <hr>
 
-                <?php echo $_SESSION['nama_lengkap'] ?>' Account
+                <?php echo $_SESSION['nama_lengkap'] ?>' Page
 
               </div>
             </div>

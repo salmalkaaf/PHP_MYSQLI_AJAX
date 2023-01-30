@@ -6,7 +6,6 @@ include('../config/koneksi.php');
 
 $username     = $_POST['username'];
 $password      = MD5($_POST['password']);
-$image     = $_FILE['image'];
 
 //query
 $query  = "SELECT * FROM tbl_user WHERE username='$username' AND password='$password'";
@@ -20,7 +19,6 @@ if($num_row >=1) {
 
     $_SESSION['id_user']       = $row['id_user'];
     $_SESSION['nama_lengkap'] = $row['nama_lengkap'];
-    $_SESSION['image'] = $row['image'];
     $_SESSION['username']       = $row['username'];
 
 } else {

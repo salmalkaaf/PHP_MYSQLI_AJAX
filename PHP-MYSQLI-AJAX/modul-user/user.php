@@ -3,7 +3,7 @@
 include '../config/koneksi.php';
 if (!$_SESSION['id_user']) {
     echo '<script>
-    alert("YOU MUST LOGIN");
+    alert("anda mesti login dulu");
     window.location.href = "index.php";
     </script>
     ';
@@ -34,7 +34,6 @@ if (isset($_POST['update'])) {
         header("Refresh:0");
     }
 }
-
 ?>
 
 <!doctype html>
@@ -61,8 +60,9 @@ if (isset($_POST['update'])) {
                 <div class="card">
                     <div class="card-body">
                     <label><b>USER</b></label>
-                <hr>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalRegister" style="margin-bottom:10px;">+ tambah user</button>
+                    <br>
+                        
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalRegister" style="margin-bottom:10px";>+ tambah user</button>
                         <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="modalRegisterLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -73,7 +73,7 @@ if (isset($_POST['update'])) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                    <form action="" method="post";>
+                                    
                                         <div class="form-group">
                                             <label>Nama Lengkap</label>
                                             <input type="text" class="form-control" id="nama_lengkap" placeholder="Masukkan Nama Lengkap">
@@ -86,15 +86,15 @@ if (isset($_POST['update'])) {
                                             <label>Password</label>
                                             <input type="password" class="form-control" id="password" placeholder="Masukkan Password">
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label>Image</label>
                                             <input type="file" class="form-control" id="image" placeholder="Masukkan Foto">
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="modal-footer">
-                                        <button class="btn btn-register btn-block btn-success">REGISTER</button>
+                                        <button class="btn btn-register btn-block btn-success">Tambah User</button>
                                     </div>
-</form>
+
                                 </div>
                             </div>
                         </div>
@@ -105,9 +105,6 @@ if (isset($_POST['update'])) {
                                     <th>NAMA LENGKAP</th>
                                     <th>USERNAME</th>
                                     <th>PASSWORD</th>
-                                    <th>IMAGE</th>
-                                    
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -116,7 +113,6 @@ if (isset($_POST['update'])) {
                                     echo '<tr><td>' . $r->nama_lengkap . '</td>';
                                     echo '<td>' . $r->username . '</td>';
                                     echo '<td>' . $r->password . '</td>';
-                                    echo '<td>' . $r->image . '</td>';
                                     echo '<td><a href="#" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal' . $r->id_user . '">Edit</a></td>';
                                     echo '<td><form action="" method="post"><input name="id_user" type="hidden" value=' . $r->id_user . '><button type="submit" class="btn btn-danger">hapus</form></td>';
                                     echo '<td></td></tr>';
@@ -140,24 +136,19 @@ if (isset($_POST['update'])) {
                                     <div class="form-group">
                                                 <label>Nama Lengkap</label>
                                                 <input name="id_update" value=' . $r_edit->id_user . ' type="hidden">
-                                                <input name="nama_lengkap" value=' . $r_edit->nama_lengkap . ' type="text" class="form-control" placeholder="Masukkan Nama Lengkap" required>
+                                                <input name="nama_lengkap" value=' . $r_edit->nama_lengkap . ' type="text" class="form-control" placeholder="Masukkan Nama Lengkap">
                                             </div>
                                             <div class="form-group">
                                                 <label>Username</label>
-                                                <input name="username" value=' . $r_edit->username . '  type="text" class="form-control"  placeholder="Masukkan Username" required>
+                                                <input name="username" value=' . $r_edit->username . '  type="text" class="form-control"  placeholder="Masukkan Username">
                                             </div>
                                             <div class="form-group">
                                                 <label>Password</label>
-                                                <input name="password" value=""  type="password" class="form-control"  placeholder="Masukkan Password" required>
+                                                <input name="password" value=""  type="password" class="form-control"  placeholder="Masukkan Password">
                                             </div>
-                                            <div class="form-group">
-                                            <label>Image</label>
-                                            <input name="image" value=' . $r_edit->image . '  type="file" class="form-control"  placeholder="Masukkan foto" required>
                                         </div>
-                                        </div>
-                                        
                                         <div class="modal-footer">
-                                            <button type="submit" name="register" class="btn btn-update btn-block btn-primary">UPDATE</button>
+                                            <button type="submit" name="update" class="btn btn-update btn-block btn-primary">UPDATE</button>
                                         </div>
                                     </div>
                                     </form>
@@ -180,6 +171,7 @@ if (isset($_POST['update'])) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
 </body>
+
 <script>
     $(document).ready(function() {
 
@@ -233,10 +225,12 @@ if (isset($_POST['update'])) {
 
                             Swal.fire({
                                 type: 'success',
-                                title: 'Register Berhasil!',
-                                text: 'silahkan login!'
+                                title: 'Tambah User Berhasil!',
+                                timer: 2000,
+                                showCancelButton: false,
+                    showConfirmButton: false
                             }).then(function() {
-                                window.location.href = 'dashboard.php';
+                                window.location.href = 'user.php';
                             });
 
                             $("#nama_lengkap").val('');
@@ -247,7 +241,7 @@ if (isset($_POST['update'])) {
 
                             Swal.fire({
                                 type: 'error',
-                                title: 'Register Gagal!',
+                                title: 'Tambah User Gagal!',
                                 text: 'silahkan coba lagi!'
                             });
 
