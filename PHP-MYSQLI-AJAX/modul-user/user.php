@@ -3,7 +3,7 @@
 include '../config/koneksi.php';
 if (!$_SESSION['id_user']) {
     echo '<script>
-    alert("anda mesti login dulu");
+    alert("YOU MUST LOGIN FIRST");
     window.location.href = "index.php";
     </script>
     ';
@@ -43,6 +43,7 @@ if (isset($_POST['update'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
     <title>Dashboard</title>
 </head>
@@ -62,7 +63,7 @@ if (isset($_POST['update'])) {
                     <label><b>USER</b></label>
                     <br>
                         
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalRegister" style="margin-bottom:10px";>+ tambah user</button>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalRegister" style="margin-bottom:10px";><i class="fa-sharp fa-solid fa-user-plus"></i>  TAMBAH USER</button>
                         <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="modalRegisterLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -113,8 +114,8 @@ if (isset($_POST['update'])) {
                                     echo '<tr><td>' . $r->nama_lengkap . '</td>';
                                     echo '<td>' . $r->username . '</td>';
                                     echo '<td>' . $r->password . '</td>';
-                                    echo '<td><a href="#" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal' . $r->id_user . '">Edit</a></td>';
-                                    echo '<td><form action="" method="post"><input name="id_user" type="hidden" value=' . $r->id_user . '><button type="submit" class="btn btn-danger">hapus</form></td>';
+                                    echo '<td><a href="#" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal' . $r->id_user . '"><i class="fa-sharp fa-solid fa-pen"></i></a></td>';
+                                    echo '<td><form action="" method="post"><input name="id_user" type="hidden" value=' . $r->id_user . '><button type="submit" class="btn btn-danger"><i class="fa-sharp fa-solid fa-trash"></form></td>';
                                     echo '<td></td></tr>';
                                     echo '<div class="modal fade" id="myModal' . $r->id_user . '" role="dialog" aria-labelledby="myModal' . $r->id_user . 'Label" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -228,7 +229,7 @@ if (isset($_POST['update'])) {
                                 title: 'Tambah User Berhasil!',
                                 timer: 2000,
                                 showCancelButton: false,
-                    showConfirmButton: false
+                                showConfirmButton: false
                             }).then(function() {
                                 window.location.href = 'user.php';
                             });

@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
-    <title>Dashboard</title>
+    <title>PROFILE</title>
   </head>
   <body>
 
@@ -29,7 +29,7 @@
           <div class="col-md-9">
             <div class="card">
               <div class="card-body">
-                <label><b>Profile</b></label>
+                <label><b>PROFILE</b></label>
                 <hr>
 
                 <?php echo $_SESSION['nama_lengkap'] ?>' Page

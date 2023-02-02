@@ -3,7 +3,7 @@
 include '../config/koneksi.php';
 // if (!$_SESSION['id_student']) {
 //     echo '<script>
-//     alert("anda mesti login dulu");
+//     alert("YOU MUST LOGIN FIRST");
 //     window.location.href = "../modul-user/index.php";
 //     </script>
 //     ';
@@ -15,7 +15,11 @@ if (isset($_POST['addStudent'])) {
     $nisn = $_POST['nisn'];
     $full_name = $_POST['full_name'];
     $address = $_POST['address'];
-    $q = "INSERT INTO tbl_student(full_name, nisn, address) VALUES (' $full_name  ', '  $nisn  ', '  $address  ')";
+    $filename = $_FILES["uploadfile"]["name"];
+    $tempname = $_FILES["uploadfile"]["tmp_name"];
+    $folder = "./image/" . $filename;
+
+    $q = "INSERT INTO tbl_student(full_name, nisn, address, filename) VALUES (' $full_name  ', '  $nisn  ', '  $address  ', '$filename' )";
     $connection->query($q);
 }
 
@@ -47,6 +51,7 @@ if (isset($_POST['update'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
     <title>Dashboard</title>
 </head>
@@ -65,7 +70,7 @@ if (isset($_POST['update'])) {
                     <div class="card-body">
                     <label><b>SISWA</b></label>
                <br>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalRegister" style="margin-bottom:10px;">+ tambah siswa</button>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalRegister" style="margin-bottom:10px;"><i class="fa-sharp fa-solid fa-user-plus"></i>  TAMBAH SISWA</button>
                         <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="modalRegisterLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -76,7 +81,7 @@ if (isset($_POST['update'])) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="" method="post";>
+                                    <form action="simpan-siswa.php" method="POST" enctype="multipart/form-data">    
                                         <div class="form-group">
                                             <label>NISN</label>
                                             <input type="text" name="nisn"class="form-control" id="nisn" placeholder="Masukkan NISN">
@@ -89,11 +94,14 @@ if (isset($_POST['update'])) {
                                             <label>Alamat</label>
                                             <input type="text" name="address"class="form-control" id="address" placeholder="Masukkan Alamat">
                                         </div>
+                                        <div class="form-group">
+                                        <input class="form-control" type="file" name="uploadfile" value="" />
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button class="btn btn-register btn-block btn-success">TAMBAH SISWA</button>
+                                        <button type="submit" class="btn btn-block btn-success">TAMBAH SISWA</button>
                                     </div>
-                                </form>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +112,7 @@ if (isset($_POST['update'])) {
                                     <th>NISN</th>
                                     <th>NAMA LENGKAP</th>
                                     <th>ALAMAT</th>
-                                    <th></th>
+                                    <th>FOTO</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -114,8 +122,8 @@ if (isset($_POST['update'])) {
                                     echo '<tr><td>' . $r->nisn . '</td>';
                                     echo '<td>' . $r->full_name . '</td>';
                                     echo '<td>' . $r->address . '</td>';
-                                    echo '<td><a href="#" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal' . $r->id_student . '">Edit</a></td>';
-                                    echo '<td><form action="" method="post"><input name="id_student" type="hidden" value=' . $r->id_student . '><button type="submit" class="btn btn-danger">hapus</form></td>';
+                                    echo '<td><a href="#" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal' . $r->id_student . '"> <i class="fa-sharp fa-solid fa-pen"></i> </a></td>';
+                                    echo '<td><form action="" method="post"><input name="id_student" type="hidden" value=' . $r->id_student . '><button type="submit" class="btn btn-danger"></form>  <i class="fa-sharp fa-solid fa-trash"></i></td>';
                                     echo '<td></td></tr>';
                                     echo '<div class="modal fade" id="myModal' . $r->id_student . '" role="dialog" aria-labelledby="myModal' . $r->id_student . 'Label" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -225,10 +233,12 @@ if (isset($_POST['update'])) {
 
                             Swal.fire({
                                 type: 'success',
-                                title: 'Register Berhasil!',
-                                text: 'silahkan login!'
+                                title: 'Tambah Siswa Berhasil!',
+                                timer: 2000,
+                                showCancelButton: false,
+                                showConfirmButton: false
                             }).then(function() {
-                                window.location.href = 'dashboard.php';
+                                window.location.href = 'data-students.php';
                             });
 
                             $("#nisn").val('');
@@ -239,7 +249,7 @@ if (isset($_POST['update'])) {
 
                             Swal.fire({
                                 type: 'error',
-                                title: 'Register Gagal!',
+                                title: 'Tambah Siswa Gagal!',
                                 text: 'silahkan coba lagi!'
                             });
 
