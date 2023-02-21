@@ -1,6 +1,7 @@
 <?php
 
 //deklasrasi variabel
+
 $db_host = "localhost";
 $db_user = "root";
 $db_pass = "";

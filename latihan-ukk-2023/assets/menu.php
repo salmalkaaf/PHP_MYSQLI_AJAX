@@ -94,6 +94,16 @@
           </li>
        
           <!-- <li class="nav-header">EXAMPLES</li> -->
+       
+          <li class="nav-item">
+          <a href="<?php $_SERVER['SERVER_NAME']?>/latihan-ukk-2023/modul/modul-profile" class="nav-link">
+              <i class="nav-icon fa fa-user"></i>
+              <p>
+                PROFILE
+                <span class="badge badge-info right"></span>
+              </p>
+            </a>
+          </li>
         
           <li class="nav-item">
             <a href="<?php $_SERVER['SERVER_NAME']?>" class="nav-link">
@@ -141,7 +151,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?php $_SERVER['SERVER_NAME']?>/latihan-ukk-2023/modul/modul-auth/logout.php" class="nav-link">
+           <a href="<?php $_SERVER['SERVER_NAME']?>/latihan-ukk-2023/modul/modul-auth/logout.php" class="nav-link">
               <i class="nav-icon fas fa-arrow-right-from-bracket"></i>
               <p>
                 LOGOUT

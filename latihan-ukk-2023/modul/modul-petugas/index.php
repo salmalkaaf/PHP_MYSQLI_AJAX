@@ -5,7 +5,7 @@
 @session_start();
 include('../../assets/koneksi.php'); 
 include('../../assets/header.php'); 
-$q =  "SELECT * FROM pengaduan";
+$q =  "SELECT * FROM petugas";
 $d = mysqli_query($connection, $q);
 ?>
 
@@ -53,9 +53,43 @@ $d = mysqli_query($connection, $q);
                                             <th>Username</th>
                                             <th>Password</th>
                                             <th>Telepon</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <?php
+                                while ($r = mysqli_fetch_object($d)) {
+                                    echo '<tr><td>' . '1' .'</td>';
+                                    echo '<td>' . $r->nama_petugas . '</td>';
+                                    echo '<td>' . $r->username . '</td>';
+                                    echo '<td>' . $r->password . '</td>';
+                                    echo '<td>' . $r->telp . '</td>';
+
+                                //button edit
+                                // echo '<td style="text-align:center"><a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal' . $r->id_petugas . '"><i class="fa-sharp fa-solid fa-pen"></i> </a>';
+
+                                // //button hapus
+                                // echo '<form action="" method="post"><input name="nik" type="hidden" value=' . $r->id_petugas . '><button type="submit" class="btn btn-danger"></form><i class="fa-sharp fa-solid fa-trash"></i></td>';
+                                // echo '  </tr>';
+                                echo '<td  style="text-align:center">
+                                <button class="btn btn-primary" href="#" type="button" data-toggle="modal" data-target="#myModal' . $r->id_petugas . '"><i class="fa-sharp fa-solid fa-pen"></i></button>
+                                <input name="id_petugas" type="hidden" value=' . $r->id_petugas . '><button  type="submit" class="btn btn-danger"><i class="fa-sharp fa-solid fa-trash"></i></button>
+                                </td>';
+
+                                    //edit data
+                                    echo '<div class="modal fade" id="myModal' . $r->id_petugas . '" role="dialog" aria-labelledby="myModal' . $r->id_petugas . 'Label" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="myModal' . $r->id_petugas . 'Label">EDIT DATA</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                        ';}
+                                        ?>
+                                        </tbody>
                                 </table>        
                             </form>        
                         </div>

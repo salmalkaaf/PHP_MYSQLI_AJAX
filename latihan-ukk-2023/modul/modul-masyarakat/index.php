@@ -8,6 +8,30 @@ include('../../assets/koneksi.php');
 include('../../assets/header.php'); 
 $q =  "SELECT * FROM masyarakat";
 $d = mysqli_query($connection, $q);
+
+if (isset($_POST['edit'])) {
+    $status = $_POST['status'];
+    $nik = $_POST['nik'];
+    $q = mysqli_query($connection, "UPDATE `masyarakat` SET verifikasi = '$status' WHERE nik = '$nik'");
+}
+
+if (isset($_POST['hapus'])) {
+    $nik = $_POST['nik'];
+    $q = mysqli_query($connection, "DELETE FROM `masyarakat` WHERE nik = '$nik'");
+}
+if (isset($_POST['update'])) {
+    $nikLama = $_POST['nikLama'];
+    $nik = $_POST['nik'];
+    $nama = $_POST['nama'];
+    $username = $_POST['username'];
+    $telp = $_POST['telp'];
+    $password = md5($_POST['password']);
+    if ($password == '') {
+        $q = mysqli_query($connection, "UPDATE `masyarakat` SET nik = '$nik', nama = '$nama', username = '$username', telp = '$telp' WHERE nik = '$nikLama'");
+    } else {
+        $q = mysqli_query($connection, "UPDATE `masyarakat` SET `password` = '$password', nik = '$nik', nama = '$nama', username = '$username', telp = '$telp' WHERE nik = '$nikLama'");
+    }
+}
 ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -56,35 +80,97 @@ $d = mysqli_query($connection, $q);
                                             <th>Password</th>
                                             <th>Telepon</th>
                                             <th>Verifikasi</th>
-                                            <th>Foto</th>
                                             <th>Action</th>
+                                            <th>Edit</th>
+                                            <th>Hapus</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                     
                                 <?php
-                                while ($r = mysqli_fetch_object($d)) {
-                                    echo '<tr><td>' .' 1 '.'</td>';
-                                    echo '<td>' . $r->nik . '</td>';
-                                    echo '<td>' . $r->nama . '</td>';
-                                    echo '<td>' . $r->username . '</td>';
-                                    echo '<td>' . $r->password . '</td>';
-                                    echo '<td>' . $r->telepon . '</td>';
-                                    echo '<td>' . $r->verifikasi . '</td>';
-                                    //foto
+                                  $q = mysqli_query($connection, "SELECT * FROM `masyarakat`");
+                                  $no = 1;
+                                  while ($d = mysqli_fetch_object($q)) { ?>
+                                    <tr>
+                                        <td><?= $no ?></td>
+                                        <td><?= $d->nik ?></td>
+                                        <td><?= $d->nama ?></td>
+                                        <td><?= $d->username ?></td>
+                                        <td><?= $d->password ?></td>
+                                        <td><?= $d->verifikasi ?></td>
+                                        <td><?= $d->telepon ?></td>
+                                        <td><?php if ($d->verifikasi == 0) {
+                                                echo '<form action="" method="post"><input name="nik" type="hidden" value="' . $d->nik . '"><input name="status" type="hidden" value="1"><button name="edit" type="submit" class="btn btn-danger"><i class="fa fa-ban"></i></button></form>';
+                                            } else {
+                                                echo '<form action="" method="post"><input name="nik" type="hidden" value="' . $d->nik . '"><input name="status" type="hidden" value="0"><button name="edit" type="submit" class="btn btn-info"><i class="fa fa-check"></i></button></form>';
+                                            } ?></td>
+                                        <td><button data-toggle="modal" data-target="#modal-xl<?= $d->nik ?>" class="btn btn-success"><i class="fa fa-pen"></i></button></td>
+                                        <td>
+                                            <form action="" method="post"><input type="hidden" name="nik" value="<?= $d->nik ?>"><button name="hapus" class="btn btn-danger"><i class="fa fa-trash"></i></button></form>
+                                        </td>
+                                    </tr>
 
-                                    echo '<td> <?php if (!empty($d->foto)) { ?>
-                                        <img class="img-thumbnail" style="max-width:100px" src="../../assets/images/siswa/<?= $d->foto ?>" alt="">
-                                    <?php } else { ?>
-                                        <img class="img-thumbnail" style="max-width:100px" src="../../assets/images/siswa/no-photo.png" alt="">
-                                    <?php } ?> </td>';
+                                      <!-- modal start -->
+                                      <div class="modal fade" id="modal-xl<?= $d->nik ?>">
+                                                <div class="modal-dialog modal-xl<?= $d->nik ?>">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Edit Data</h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form action="" method="post">
+                                                            <input type="hidden" name="nikLama" value="<?= $d->nik ?>">
+                                                            <div class="modal-body">
+                                                                <div class="form-group"><label for="nik">Nik</label>
+                                                                    <input class="form-control" type="text" name="nik" value="<?= $d->nik ?>">
+                                                                </div>
+                                                                <div class="form-group"><label for="nama">Nama</label>
+                                                                    <input class="form-control" type="text" name="nama" value="<?= $d->nama ?>">
+                                                                </div>
+                                                                <div class="form-group"><label for="username">Username</label>
+                                                                    <input class="form-control" type="text" name="username" value="<?= $d->username ?>">
+                                                                </div>
+                                                                <div class="form-group"><label for="username">New Password</label>
+                                                                    <input class="form-control" type="password" name="password" value="">
+                                                                </div>
+                                                                <div class="form-group"><label for="username">Telepon</label>
+                                                                    <input class="form-control" type="number" name="telp" value="<?= $d->nik ?>">
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-between">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                <button type="submit" name="update" class="btn btn-primary">Save changes</button>
+                                                            </div>
+                                                    </div>
+                                                    </form>
+                                                    <!-- /.modal-content -->
+                                                </div>
+                                                <!-- /.modal-dialog -->
+                                            </div>
+                                            <!-- modal - ends -->
 
-                                //button edit
-                                echo '<td style="text-align:center"><a href="#" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal' . $r->nik . '"><i class="fa-sharp fa-solid fa-pen"></i> </a>';
+                                        <?php $no++;
+                                        }
+                                        ?>
 
-                                //button hapus
-                                echo '<form action="" method="post"><input name="nik" type="hidden" value=' . $r->nik . '><button type="submit" class="btn btn-danger"></form><i class="fa-sharp fa-solid fa-trash"></i></td>';
-                                echo '  </tr>';
+
+                                    <!-- //foto
+
+
+                                // //button edit
+                                // echo '<td style="text-align:center"><a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal' . $r->nik . '"><i class="fa-sharp fa-solid fa-pen"></i> </a>';
+
+                                // //button hapus
+                                // echo '<form action="" method="post"><input name="nik" type="hidden" value=' . $r->nik . '><button type="submit" class="btn btn-danger"></form><i class="fa-sharp fa-solid fa-trash"></i></td>';
+                                // echo '  </tr>';
+
+                                echo '<td  style="text-align:center">
+                                <button class="btn btn-primary" href="#" type="button" data-toggle="modal" data-target="#myModal' . $r->nik . '"><i class="fa-sharp fa-solid fa-pen"></i></button>
+                                <form action="" method="post"><input name="nik" type="hidden" value=' . $r->nik . '><button  type="submit" class="btn btn-danger"></form><i class="fa-sharp fa-solid fa-trash"></i></button>
+                                </td>';
 
                                     //edit data
                                     echo '<div class="modal fade" id="myModal' . $r->nik . '" role="dialog" aria-labelledby="myModal' . $r->nik . 'Label" aria-hidden="true">
@@ -109,11 +195,11 @@ $d = mysqli_query($connection, $q);
                                     <div class="form-group">
                                                 <label>NISN</label>
                                                 <input name="id_update" value=' . $r_edit->nik . ' type="hidden">
-                                                <input name="nisn" value=' . $r_edit->nisn . ' type="text" class="form-control" placeholder="Masukkan NISN">
+                                                <input name="nik" value=' . $r_edit->nik . ' type="text" class="form-control" placeholder="Masukkan NISN">
                                             </div>
                                             <div class="form-group">
                                                 <label>NAMA LENGKAP</label>
-                                                <input name="full_name" value=' . $r_edit->full_name . '  type="text" class="form-control"  placeholder="Masukkan Nama Lengkap">
+                                                <input name="nama" value=' . $r_edit->nama . '  type="text" class="form-control"  placeholder="Masukkan Nama Lengkap">
                                             </div>
                                             <div class="form-group">
                                                 <label>ALAMAT</label>
@@ -130,19 +216,8 @@ $d = mysqli_query($connection, $q);
                                     }
                                 }
                                 ?>
-                           
-                                        <tr>
-                                            <td>1</td>
-                                            <td>12345678</td>
-                                            <td>Salma Alkaaf</td>
-                                            <td>Sakura</td>
-                                            <td>zzzz</td>
-                                            <td>00000000</td>
-                                            <td>Verifikasi</td>
-                                            <td>X</td>
-                                            <td  style="text-align:center"><button class="btn btn-primary"><i class="fa-sharp fa-solid fa-pen"></i></button>
-                                            <button class="btn btn-danger"><i class="fa-sharp fa-solid fa-trash"></i></button></td>
-                                        </tr>
+                            -->
+                                        
                                     </tbody>
                                 </table>
                             </div>
