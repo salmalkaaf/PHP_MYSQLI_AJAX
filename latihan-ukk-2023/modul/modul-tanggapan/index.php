@@ -2,13 +2,7 @@
 <html lang="en">
 
 <!-- header -->
-<?php
-@session_start();
-include('../../assets/koneksi.php'); 
-include('../../assets/header.php'); 
-$q =  "SELECT * FROM tanggapan";
-$d = mysqli_query($connection, $q);
-?>
+<?php include('../../assets/header.php') ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -34,84 +28,31 @@ $d = mysqli_query($connection, $q);
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Main content -->
-            
-            <div class="container-fluid" style="margin-top:10px">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">TANGGAPAN</h3><br>
-                                <button class="btn btn-success"><i class="fa-sharp fa-solid fa-user-plus"></i>  Tambah Data</button>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                            <form action="" method="POST" enctype="multipart/form-data"> 
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr style="text-align:center">
-                                            <th>ID Tanggapan</th>
-                                            <th>ID Pengaduan</th>
-                                            <th>Tanggal Tanggapan</th>
-                                            <th>Tanggapan</th>
-                                            <th>ID_Petugas</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php
-                                while ($r = mysqli_fetch_object($d)) {
-                                    echo '<tr><td>' . '1' .'</td>';
-                                    echo '<td>' . $r->id_pengaduan . '</td>';
-                                    echo '<td>' . $r->tgl_tanggapan . '</td>';
-                                    echo '<td>' . $r->tanggapan . '</td>';
-                                    echo '<td>' . $r->id_petugas . '</td>';
-
-                                //button edit
-                                // echo '<td style="text-align:center"><a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal' . $r->id_tanggapan . '"><i class="fa-sharp fa-solid fa-pen"></i> </a>';
-
-                                // //button hapus
-                                // echo '<form action="" method="post"><input name="nik" type="hidden" value=' . $r->id_tanggapan . '><button type="submit" class="btn btn-danger"></form><i class="fa-sharp fa-solid fa-trash"></i></td>';
-                                // echo '  </tr>';
-
-                                echo '<td  style="text-align:center">
-                                <button class="btn btn-primary" href="#" type="button" data-toggle="modal" data-target="#myModal' . $r->id_tanggapan . '"><i class="fa-sharp fa-solid fa-pen"></i></button>
-                                <input name="id_pengaduan" type="hidden" value=' . $r->id_tanggapan . '><button  type="submit" class="btn btn-danger"><i class="fa-sharp fa-solid fa-trash"></i></button>
-                                </td>';
-
-                                    //edit data
-                                    echo '<div class="modal fade" id="myModal' . $r->id_tanggapan . '" role="dialog" aria-labelledby="myModal' . $r->id_tanggapan . 'Label" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="myModal' . $r->id_tanggapan . 'Label">EDIT DATA</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                        ';}
-                                        ?>
-                                        </tbody>
-                                </table>        
-                            </form>        
-                        </div>
-                    </div>
-                </div>
+            <div class="container-fluid">
+                Modul Tanggapan
+                <!-- /.row -->
             </div>
+            <!-- /.container-fluid -->
+            <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 3.2.0
+            </div>
+        </footer>
+
+        <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
         </aside>
-</div>
-    <?php include('../../assets/footer.php') ?>
-    <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
+        <!-- /.control-sidebar -->
     </div>
-  </footer>
+    <!-- ./wrapper -->
+    <?php include('../../assets/footer.php') ?>
+
 </body>
 
 </html>

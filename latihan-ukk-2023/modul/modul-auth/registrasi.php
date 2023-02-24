@@ -1,5 +1,5 @@
 <?php
-include('../../assets/koneksi.php');
+include('../../config/database.php');
 if (isset($_POST['simpan'])) {
     $nik = $_POST['nik'];
     $nama = $_POST['nama'];

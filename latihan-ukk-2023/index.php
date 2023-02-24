@@ -1,3 +1,2 @@
-<?php 
-@header('location:modul/modul-auth');
-?>
+<?php
+header("location:modul/modul-auth");

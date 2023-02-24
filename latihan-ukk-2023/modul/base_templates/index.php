@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- header -->
-<?php include('assets/header.php') ?>
+<?php include('../../assets/header.php') ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -24,7 +24,7 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <?php include('assets/menu.php'); ?>
+        <?php include('../../assets/menu.php'); ?>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Main content -->
@@ -51,7 +51,7 @@
         <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
-    <?php include('assets/footer.php') ?>
+    <?php include('../../assets/footer.php') ?>
 
 </body>
 

@@ -1,30 +1,34 @@
 <?php
-include('../../assets/koneksi.php');
+include('../../config/database.php');
 if (isset($_POST['cek'])) {
     $pilihan = $_POST['pilihan']; //masyarakat atau petugas
     $username = $_POST['username'];
     $password = md5($_POST['password']);
     if ($pilihan == 'masyarakat') {
-        $q = mysqli_query($connection, "SELECT * FROM `masyarakat` WHERE username = '$username' AND password = '$password' AND verifikasi = 1");
+        $q = mysqli_query($con, "SELECT * FROM `masyarakat` WHERE username = '$username' AND password = '$password' AND verifikasi = 1");
         $r = mysqli_num_rows($q);
         if ($r == 1) {
             $d = mysqli_fetch_object($q);
             @session_start();
+            $_SESSION['nik'] = $d->nik;
             $_SESSION['username'] = $d->username;
+            $_SESSION['nama'] = $d->nama;
+            $_SESSION['telp'] = $d->telp;
             $_SESSION['level'] = 'masyarakat';
-            @header('location:../../modul/modul-masyarakat/');
+            @header('location:../../modul/modul-profile/');
         } else {
-            echo '<div class="alert alert-warning alert-dismissable"><a href="" class="close" data-dismiss="alert">x</a> <strong class="text-white">Data anda belum di verifikasi</strong></div>';
+            echo '<div class="alert alert-danger alert-dismissable"><a href="" class="close" data-dismiss="alert">x</a> <strong class="text-white">Data salah atau belum di verifikasi</strong></div>';
         }
     } else if ($pilihan == 'petugas') {
-        $q = mysqli_query($connection, "SELECT * FROM `petugas` WHERE username = '$username' AND password = '$password'");
+        $q = mysqli_query($con, "SELECT * FROM `petugas` WHERE username = '$username' AND password = '$password'");
         $r = mysqli_num_rows($q);
         if ($r == 1) {
             $d = mysqli_fetch_object($q);
             @session_start();
             $_SESSION['username'] = $d->username;
             $_SESSION['level'] = $d->level;
-            // @header('location:../../modul/modul-petugas/');
+            $_SESSION['level'] = $d->level;
+            @header('location:../../modul/modul-petugas/');
         }
     }
 }
@@ -62,12 +66,12 @@ if (isset($_POST['cek'])) {
                                     </div>
                                     <div class="form-group">
                                         <select class="form-control" name="pilihan">
-                                            <option value="masyarakat">Masyarakat</option>
+                                            <option value="masyarakat">masyarakat</option>
                                             <option value="petugas">Petugas</option>
                                         </select>
                                     </div>
-                                    <div class="form-group mb-0"> 
-                                        <span class="text">Belum terverifikasi?  </span>Coba daftar <a href="register.php">disini</a>
+                                    <div class="form-group mb-0">
+                                        <span class="text text-success">Belum terverifikasi?</span>Coba daftar <a href="registrasi.php">disini</a>
                                     </div>
                                 </div>
                                 <div class="card-footer">

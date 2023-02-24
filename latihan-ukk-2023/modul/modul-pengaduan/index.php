@@ -1,14 +1,51 @@
+<?php
+// SESSION
+session_start();
+include('../../config/database.php');
+if (empty($_SESSION['username'])) {
+    @header('location:../modul-auth/index.php');
+} else {
+    if ($_SESSION['level'] == 'masyarakat') {
+        $nik = $_SESSION['nik'];
+    }
+}
+// CRUD
+if (isset($_POST['tambahPengaduan'])) {
+    $isi_laporan = $_POST['isi_laporan'];
+    $tgl = $_POST['tgl_pengaduan'];
+    //upload
+    $ekstensi_diperbolehkan = array('jpg', 'png');
+    $foto = $_FILES['foto']['name'];
+    print_r($foto);
+    $x = explode(".", $foto);
+    $ekstensi = strtolower(end($x));
+    $file_tmp = $_FILES['foto']['tmp_name'];
+    if (!empty($foto)) {
+        if (in_array($ekstensi, $ekstensi_diperbolehkan) === true) {
+            $q = "INSERT INTO `pengaduan`(id_pengaduan, tgl_pengaduan, nik, isi_laporan, foto, `status`) VALUES ('', '$tgl', '$nik', '$isi_laporan', '$foto', '0')";
+            $r = mysqli_query($con, $q);
+            if ($r) {
+                move_uploaded_file($file_tmp, '../../assets/images/masyarakat/' . $foto);
+            }
+        }
+    } else {
+        $q = "INSERT INTO `pengaduan`(id_pengaduan, tgl_pengaduan, nik, isi_laporan, foto, `status`) VALUES ('', '$tgl', '$nik', '$isi_laporan', '', '0')";
+        $r = mysqli_query($con, $q);
+    }
+}
+
+// hapus
+if (isset($_POST['hapus'])) {
+    $id_pengaduan = $_POST['id_pengaduan'];
+    $q = "DELETE FROM `pengaduan` WHERE id_pengaduan = $id_pengaduan";
+    $r = mysqli_query($con, $q);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <!-- header -->
-<?php
-@session_start();
-include('../../assets/koneksi.php'); 
-include('../../assets/header.php'); 
-$q =  "SELECT * FROM pengaduan";
-$d = mysqli_query($connection, $q);
-?>
+<?php include('../../assets/header.php') ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -30,94 +67,127 @@ $d = mysqli_query($connection, $q);
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <?php include('../../assets/menu.php'); ?>
+        <?php include('../../assets/menu.php')
+        ?>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Main content -->
-            
-            <div class="container-fluid" style="margin-top:10px">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">PENGADUAN</h3><br>
-                                <button class="btn btn-success"><i class="fa-sharp fa-solid fa-user-plus"></i>  Tambah Data</button>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                            <form action="" method="POST" enctype="multipart/form-data"> 
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr style="text-align:center">
-                                            <th>ID Pengaduan</th>
-                                            <th>Tanggal Pengaduan</th>
-                                            <th>NIK</th>
-                                            <th>Isi Laporan</th>
-                                            <!-- <th>Foto</th> -->
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php
-                                while ($r = mysqli_fetch_object($d)) {
-                                    echo '<tr><td>' . $r->id_pengaduan .'</td>';
-                                    echo '<td>' . $r->tgl_pengaduan . '</td>';
-                                    echo '<td>' . $r->nik . '</td>';
-                                    echo '<td>' . $r->isi_laporan . '</td>';
-                                    echo '<td>' . $r->status . '</td>';
-                                      //foto
-                                  
-
-                                    // //button edit
-                                    // echo '<td style="text-align:center"><a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal' . $r->id_pengaduan . '"><i class="fa-sharp fa-solid fa-pen"></i> </a>';
-
-                                    // //button hapus
-                                    // echo '<form action="" method="post"><input name="id_pengaduan" type="hidden" value=' . $r->id_pengaduan . '><button type="submit" class="btn btn-danger"></form><i class="fa-sharp fa-solid fa-trash"></i></td>';
-                                    // echo '  </tr>';
-
-                                    echo '<td  style="text-align:center">
-                                    <button class="btn btn-primary" href="#" type="button" data-toggle="modal" data-target="#myModal' . $r->id_pengaduan . '"><i class="fa-sharp fa-solid fa-pen"></i></button>
-                                    <input name="id_pengaduan" type="hidden" value=' . $r->id_pengaduan . '><button  type="submit" class="btn btn-danger"><i class="fa-sharp fa-solid fa-trash"></i></button>
-                                    </td>';
-
-                                    //edit data
-                                    echo '<div class="modal fade" id="myModal' . $r->id_pengaduan . '" role="dialog" aria-labelledby="myModal' . $r->id_pengaduan . 'Label" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="myModal' . $r->id_pengaduan . 'Label">EDIT DATA</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
+                                <h3 class="card-title">Pengaduan</h3><br>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <button data-toggle="modal" data-target="#modal-lg" class="btn btn-success">buat pengaduan&nbsp;<i class="fa fa-pen"></i></button>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="modal-lg">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                Buat Pengaduan
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="" method="post" enctype="multipart/form-data">
+                                                    <input type="hidden" name="nik" value="">
+                                                    <div class="form-group">
+                                                        <label for="isi_laporan">Isi Laporan</label>
+                                                        <textarea name="isi_laporan" class="form-control" cols="30" rows="10"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="tgl_pengaduan">Tanggal Pengaduan</label>
+                                                        <input type="date" name="tgl_pengaduan" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="foto">Foto</label>
+                                                        <input type="file" name="foto" class="form-control">
+                                                    </div>
+                                                    <input type="submit" name="tambahPengaduan" value="simpan" class="btn btn-success">
+                                                </form>
+                                            </div>
+                                            <!-- /.modal-content -->
                                         </div>
-                                        <div class="modal-body">
-                                        ';} ?>
-                                    <tbody>
-                                        
-                                </table>        
-                            </form>        
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table id="dataTablesNya" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Tanggal</th>
+                                                <th>Nik</th>
+                                                <th>Isi Laporan</th>
+                                                <th>Foto</th>
+                                                <th>Status</th>
+                                                <th>hapus</th>
+                                                <th>proses Pengaduan</th>
+                                            </tr>
+                                        </thead>
+                                        <?php  ?>
+                                        <tbody>
+                                            <?php
+                                            if ($_SESSION['level'] == 'masyarakat') {
+                                                $q = "SELECT * FROM `pengaduan` WHERE `nik` = $nik";
+                                            } else {
+                                                $q = "SELECT * FROM `pengaduan`";
+                                            }
+                                            $r = mysqli_query($con, $q);
+                                            $no = 1;
+                                            while ($d = mysqli_fetch_object($r)) {
+                                            ?>
+                                                <tr>
+                                                    <td><?= $no ?></td>
+                                                    <td><?= $d->tgl_pengaduan ?></td>
+                                                    <td><?= $d->nik ?></td>
+                                                    <td><?= $d->isi_laporan ?></td>
+                                                    <td><?php if ($d->foto == '') {
+                                                            echo '<img style="max-height:100px" class="img img-thumbnail" src="../../assets/images/no-foto.png">';
+                                                        } else {
+                                                            echo '<img style="max-height:100px" class="img img-thumbnail" src="../../assets/images/masyarakat/' . $d->foto . '">';
+                                                        } ?></td>
+                                                    <td><?= $d->status ?></td>
+                                                    <td>
+                                                        <?php if ($_SESSION['level'] == 'masyarakat') { ?>
+                                                            <form action="" method="post"><input type="hidden" name="id_pengaduan" value="<?= $d->id_pengaduan ?>"><button type="submit" name="hapus" class="btn btn-danger"><i class="fa fa-trash"></i></button></form>
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            <?php $no++;
+                                            } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
+                        <!-- /.col -->
                     </div>
+                    <!-- /.row -->
                 </div>
+                <!-- /.container-fluid -->
+                <!-- /.content -->
             </div>
-        </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+                All rights reserved.
+                <div class="float-right d-none d-sm-inline-block">
+                    <b>Version</b> 3.2.0
+                </div>
+            </footer>
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
-    <?php include('../../assets/footer.php') ?>
-    <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
-    </div>
-  </footer>
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark">
+                <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
+        </div>
+        <!-- ./wrapper -->
+        <?php include('../../assets/footer.php') ?>
+
 </body>
 
 </html>
